@@ -28,16 +28,19 @@ SmartPlan AI is a mobile application designed to help users manage their tasks a
 *(Here you will embed your screenshots. For example:)*
 
 **Login Screen:**
-![Login Screen](\assets\readme-screenshots\Media (5).jpg)
+![Login Screen](/assets/readme-screenshots/Media%20(5).jpg)
+
+**Register Screen:**
+![Register Screen](/assets/readme-screenshots/Media%20(4).jpg)
 
 **Dashboard (Home Screen):**
-![Dashboard Screen](\assets\readme-screenshots\Media (3).jpg)
+![Dashboard Screen](/assets/readme-screenshots/Media%20(3).jpg)
 
 **All Tasks Screen:**
-![All Tasks Screen](path/to/your/all_tasks_screenshot.png)
+![All Tasks Screen](/assets/readme-screenshots/Media%20(1).jpg)
 
 **Create Task Screen:**
-![Create Task Screen](path/to/your/create_task_screenshot.png)
+![Create Task Screen](/assets/readme-screenshots/Media%20(2).jpg)
 
 ## ⚙️ Setup and Running
 
@@ -50,11 +53,10 @@ SmartPlan AI is a mobile application designed to help users manage their tasks a
 
 2.  **Clone the repository (if applicable):**
     ```bash
-    git clone <your-repo-url>
+    git clone <https://github.com/mertgldal/productivity-planner-demo>
     cd mobile_app 
     ```
-    *(Replace `<your-repo-url>` and `mobile_app` with your actual repository URL and project name if different)*
-
+    
 3.  **Install dependencies:**
     ```bash
     npm install
@@ -86,8 +88,6 @@ The app uses Expo Router, with main navigation defined in `app/_layout.tsx` and 
 * `src/`: Contains reusable components, Zustand stores, type definitions, and utility functions.
 
 ## 📄 Report / App Concept Document
-
-*(This section summarizes the "App Concept Document" content from above. You can either include the full text here or link to a separate PDF/Notion page in your repository.)*
 
 **App Name:** SmartPlan AI
 
