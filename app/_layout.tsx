@@ -1,29 +1,47 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+// app/_layout.tsx
+import React, { useEffect } from 'react';
+import { useAuthStore } from '../src/store/useAuthStore';
+import { Slot, useRouter, SplashScreen } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+export default function RootLayoutNav() {
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const isLoading = useAuthStore((state) => state.isLoading);
+    const setLoading = useAuthStore((state) => state.setLoading);
+    const router = useRouter();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+    useEffect(() => {
+        const checkAuth = async () => {
+            setLoading(false);
+        };
+        checkAuth();
+    }, [setLoading]);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    useEffect(() => {
+        if (isLoading) {
+            return;
+        }
+
+        if (isAuthenticated) {
+            // (app) grubunun index dosyasına yönlendirme
+            router.replace('/(app)'); // VEYA '/(app)/' veya '/(app)/index' deneyebilirsiniz.
+            // Expo Router genellikle '(app)' yazdığınızda (app)/index.tsx'i bulur.
+        } else {
+            // (auth) grubunun login dosyasına yönlendirme
+            router.replace('/(auth)/login'); // VEYA '/(auth)/login'
+        }
+        SplashScreen.hideAsync();
+    }, [isAuthenticated, isLoading, router]);
+
+    if (isLoading) {
+        return (
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
+
+    return <Slot />;
 }
