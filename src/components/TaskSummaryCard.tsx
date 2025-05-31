@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import type { Task } from '../types';
-import { useTaskStore } from '../store/useTaskStore'; // Store'dan yolu düzelttik
+import { useTaskStore } from '../store/useTaskStore'; // Fixed the path to the store
 
 interface TaskSummaryCardProps {
     task: Task;
@@ -20,9 +20,9 @@ export function TaskSummaryCard({ task }: TaskSummaryCardProps) {
                 <Text style={[styles.title, task.is_completed && styles.completedTitle]}>
                     {task.title}
                 </Text>
-                {task.due_date && (
+                {task.deadline && (
                     <Text style={styles.dueDate}>
-                        Bitiş: {new Date(task.due_date).toLocaleDateString('tr-TR')}
+                        Due: {new Date(task.deadline).toLocaleDateString('en-US')}
                     </Text>
                 )}
             </View>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     checkbox: {
         width: 24,
         height: 24,
-        borderRadius: 12, // Daire şeklinde
+        borderRadius: 12, // Circular shape
         borderWidth: 2,
         borderColor: '#007AFF',
         justifyContent: 'center',

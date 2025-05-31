@@ -4,62 +4,58 @@ import { View, Text, TextInput, Pressable, StyleSheet, Alert, Platform } from 'r
 import { useRouter } from 'expo-router';
 import { useTaskStore } from '../../src/store/useTaskStore';
 import { FontAwesome } from '@expo/vector-icons';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'; // Doğrudan import
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 export default function CreateTaskScreen() {
     const [title, setTitle] = useState('');
-    const [deadline, setDeadline] = useState<Date | undefined>(new Date()); // Başlangıçta bugünün tarihi
-    const [showPicker, setShowPicker] = useState(false); // Tarih seçicinin görünürlüğü
+    const [deadline, setDeadline] = useState<Date | undefined>(new Date());
+    const [showPicker, setShowPicker] = useState(false);
 
     const addTask = useTaskStore((state) => state.addTask);
     const router = useRouter();
 
     const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        setShowPicker(Platform.OS === 'ios'); // iOS'ta modal gibi davranır, Android'de farklı
-        if (event.type === "set" && selectedDate) { // "set" event'i tarih seçildiğinde tetiklenir
+        setShowPicker(Platform.OS === 'ios');
+        if (event.type === "set" && selectedDate) {
             setDeadline(selectedDate);
-        } else if (event.type === "dismissed") { // Kullanıcı iptal ettiğinde
+        } else if (event.type === "dismissed") {
             setShowPicker(false);
         }
     };
 
     const handleAddTask = () => {
         if (title.trim() === '') {
-            Alert.alert('Hata', 'Görev başlığı boş bırakılamaz.');
+            Alert.alert('Error', 'Task title cannot be empty.');
             return;
         }
 
-        // deadline state'i undefined olabilir, bu yüzden null kontrolü önemli
         const deadlineISO = deadline ? deadline.toISOString() : null;
         addTask(title, deadlineISO);
 
-        Alert.alert('Başarılı', 'Görev eklendi!', [
-            { text: 'Tamam', onPress: () => router.back() },
+        Alert.alert('Success', 'Task added!', [
+            { text: 'OK', onPress: () => router.back() },
         ]);
         setTitle('');
-        setDeadline(new Date()); // Formu temizle, deadline'ı bugüne ayarla
+        setDeadline(new Date());
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Görev Başlığı:</Text>
+            <Text style={styles.label}>Task Title:</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Örn: Proje raporunu yaz"
+                placeholder="e.g., Write project report"
                 value={title}
                 onChangeText={setTitle}
                 autoCapitalize="sentences"
             />
 
-            <Text style={styles.label}>Son Teslim Tarihi:</Text>
-            {/* Android için tarih seçiciyi göstermek için butona tıklandığında showPicker true yapılır */}
-            {/* iOS için DateTimePicker her zaman görünür olabilir veya bir modal içinde gösterilebilir. */}
-            {/* Senin verdiğin örnekteki gibi bir Pressable ile tetikleyelim: */}
+            <Text style={styles.label}>Deadline:</Text>
             <Pressable onPress={() => setShowPicker(true)} style={styles.datePickerButtonContainer}>
                 <View style={styles.datePickerButton}>
                     <FontAwesome name="calendar" size={20} color="#007AFF" style={styles.iconStyle} />
                     <Text style={styles.datePickerButtonText}>
-                        {deadline ? deadline.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' }) : "Tarih Seç"}
+                        {deadline ? deadline.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' }) : "Select Date"}
                     </Text>
                 </View>
             </Pressable>
@@ -67,12 +63,11 @@ export default function CreateTaskScreen() {
             {showPicker && (
                 <DateTimePicker
                     testID="dateTimePicker"
-                    value={deadline || new Date()} // deadline tanımsızsa bugünü kullan
+                    value={deadline || new Date()}
                     mode="date"
                     is24Hour={true}
-                    display="default" // Android'de "spinner" veya "calendar" da olabilir
+                    display="default"
                     onChange={onChangeDate}
-                    // minimumDate={new Date()} // İsteğe bağlı: geçmiş tarihleri engelle
                 />
             )}
 
@@ -80,7 +75,7 @@ export default function CreateTaskScreen() {
 
             <Pressable style={styles.button} onPress={handleAddTask}>
                 <FontAwesome name="plus" size={20} color="white" />
-                <Text style={styles.buttonText}>Görevi Ekle</Text>
+                <Text style={styles.buttonText}>Add Task</Text>
             </Pressable>
         </View>
     );

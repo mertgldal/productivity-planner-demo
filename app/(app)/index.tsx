@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, FlatList, StyleSheet, Pressable } from "react-native";
+import React, { useState } from 'react';
+import { Text, View, FlatList, StyleSheet, Pressable, Modal, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { useTaskStore } from "../../src/store/useTaskStore";
 import { TaskSummaryCard } from "../../src/components/TaskSummaryCard";
@@ -8,15 +8,20 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function IndexScreen() {
     const tasks = useTaskStore((state) => state.tasks);
     const aiSuggestion = useTaskStore((state) => state.aiSuggestion);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const displayedTasks = tasks.filter(task => !task.is_completed).slice(0, 3);
+    // Filter incomplete tasks and sort by priority (assuming priority ranges from 1 to 5, with 1 being highest)
+    const displayedTasks = tasks
+        .filter(task => !task.is_completed)
+        .sort((a, b) => (a.priority ?? Infinity) - (b.priority ?? Infinity))
+        .slice(0, 3);
 
     return (
         <View style={styles.container}>
             <FlatList
                 data={displayedTasks}
                 renderItem={({ item }) => <TaskSummaryCard task={item} />}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id.toString()}
                 ListHeaderComponent={
                     <View style={styles.headerWrapper}>
                         <Text style={styles.headerTitle}>SmartPlan AI</Text>
@@ -24,15 +29,23 @@ export default function IndexScreen() {
                         {aiSuggestion && (
                             <View style={styles.suggestionContainer}>
                                 <Text style={styles.suggestionText}>💡 {aiSuggestion}</Text>
+                                <Pressable
+                                    onPress={() => setModalVisible(true)}
+                                    style={styles.infoIcon}
+                                    accessibilityRole="button"
+                                    accessibilityLabel="Information about the AI suggestion"
+                                >
+                                    <FontAwesome name="question-circle" size={18} color="#0056b3" />
+                                </Pressable>
                             </View>
                         )}
 
-                        <Text style={styles.sectionTitle}>Öncelikli Görevler</Text>
+                        <Text style={styles.sectionTitle}>Priority Tasks</Text>
                     </View>
                 }
                 ListEmptyComponent={
                     <Text style={styles.emptyTasksText}>
-                        Tamamlanacak öncelikli görev yok! 🎉
+                        No priority tasks to complete! 🎉
                     </Text>
                 }
                 contentContainerStyle={styles.scrollContentContainer}
@@ -40,21 +53,40 @@ export default function IndexScreen() {
 
             <View style={styles.buttonsWrapper}>
                 <Link href="/tasks" asChild>
-                    {/* (app) layout'u aktif olduğundan, '/tasks' -> '(app)/tasks' anlamına gelir */}
-                    <Pressable style={styles.buttonBlue}>
+                    <Pressable style={styles.buttonBlue} accessibilityRole="button">
                         <FontAwesome name="list-ul" size={20} color="white" />
-                        <Text style={styles.buttonText}>Tüm Görevleri Gör</Text>
+                        <Text style={styles.buttonText}>View All Tasks</Text>
                     </Pressable>
                 </Link>
 
                 <Link href="/createTask" asChild>
-                    {/* (app) layout'u aktif olduğundan, '/createTask' -> '(app)/createTask' anlamına gelir */}
-                    <Pressable style={styles.buttonGreen}>
+                    <Pressable style={styles.buttonGreen} accessibilityRole="button">
                         <FontAwesome name="plus" size={20} color="white" />
-                        <Text style={styles.buttonText}>Yeni Görev Ekle</Text>
+                        <Text style={styles.buttonText}>Add New Task</Text>
                     </Pressable>
                 </Link>
             </View>
+
+            {/* Modal for AI suggestion explanation */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <TouchableOpacity style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Why is this AI suggestion shown?</Text>
+                        <Text style={styles.modalText}>
+                            This suggestion is based on an analysis of your current priority tasks.
+                            Our recommendations take into account task priority, deadlines, and your past task completion speed.
+                        </Text>
+                        <Pressable onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                            <Text style={styles.closeButtonText}>Close</Text>
+                        </Pressable>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
         </View>
     );
 }
@@ -86,11 +118,17 @@ const styles = StyleSheet.create({
         marginBottom: 25,
         borderLeftWidth: 5,
         borderLeftColor: '#007aff',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     suggestionText: {
         fontSize: 16,
         color: '#0056b3',
         fontStyle: 'italic',
+        flex: 1,
+    },
+    infoIcon: {
+        marginLeft: 10,
     },
     sectionTitle: {
         fontSize: 24,
@@ -135,5 +173,40 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginLeft: 10,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        borderRadius: 15,
+        padding: 25,
+        maxWidth: 400,
+        width: '100%',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
+    },
+    modalText: {
+        fontSize: 16,
+        marginBottom: 25,
+        color: '#444',
+    },
+    closeButton: {
+        backgroundColor: '#007AFF',
+        paddingVertical: 12,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 });

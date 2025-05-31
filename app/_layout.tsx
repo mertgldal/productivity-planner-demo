@@ -14,7 +14,7 @@ export default function RootLayoutNav() {
 
     useEffect(() => {
         const checkAuth = async () => {
-            setLoading(false);
+            setLoading(false); // You might want to add real auth check here
         };
         checkAuth();
     }, [setLoading]);
@@ -25,12 +25,12 @@ export default function RootLayoutNav() {
         }
 
         if (isAuthenticated) {
-            // (app) grubunun index dosyasına yönlendirme
-            router.replace('/(app)'); // VEYA '/(app)/' veya '/(app)/index' deneyebilirsiniz.
-            // Expo Router genellikle '(app)' yazdığınızda (app)/index.tsx'i bulur.
+            // Redirect to the index file inside the (app) group
+            router.replace('/(app)'); // You can also try '/(app)/' or '/(app)/index'
+            // Expo Router usually resolves '(app)' to '(app)/index.tsx'
         } else {
-            // (auth) grubunun login dosyasına yönlendirme
-            router.replace('/(auth)/login'); // VEYA '/(auth)/login'
+            // Redirect to the login file inside the (auth) group
+            router.replace('/(auth)/login'); // Or just '/(auth)/login'
         }
         SplashScreen.hideAsync();
     }, [isAuthenticated, isLoading, router]);

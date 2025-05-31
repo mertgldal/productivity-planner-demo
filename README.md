@@ -28,19 +28,19 @@ SmartPlan AI is a mobile application designed to help users manage their tasks a
 *(Here you will embed your screenshots. For example:)*
 
 **Login Screen:**
-![Login Screen](/assets/readme-screenshots/Media%20(5).jpg)
+![Login Screen](/assets/readme-screenshots/Media%20(7).jpg)
 
 **Register Screen:**
-![Register Screen](/assets/readme-screenshots/Media%20(4).jpg)
+![Register Screen](/assets/readme-screenshots/Media%20(6).jpg)
 
 **Dashboard (Home Screen):**
-![Dashboard Screen](/assets/readme-screenshots/Media%20(3).jpg)
+![Dashboard Screen](/assets/readme-screenshots/Media%20(10).jpg)
 
 **All Tasks Screen:**
-![All Tasks Screen](/assets/readme-screenshots/Media%20(1).jpg)
+![All Tasks Screen](/assets/readme-screenshots/Media%20(9).jpg)
 
 **Create Task Screen:**
-![Create Task Screen](/assets/readme-screenshots/Media%20(2).jpg)
+![Create Task Screen](/assets/readme-screenshots/Media%20(8).jpg)
 
 ## ⚙️ Setup and Running
 

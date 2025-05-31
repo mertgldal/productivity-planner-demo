@@ -11,7 +11,7 @@ export default function AppLayout() {
 
     const handleLogout = () => {
         logoutUser();
-        // Yönlendirme RootLayout tarafından yapılacak
+        // Redirect will be handled by RootLayout
         // router.replace('/(auth)/login');
     };
 
@@ -29,8 +29,8 @@ export default function AppLayout() {
                     )
                 }}
             />
-            <Stack.Screen name="tasks" options={{ title: "Tüm Görevler", presentation: 'modal' }} />
-            <Stack.Screen name="createTask" options={{ title: "Yeni Görev Ekle", presentation: 'modal' }} />
+            <Stack.Screen name="tasks" options={{ title: "All Tasks", presentation: 'modal' }} />
+            <Stack.Screen name="createTask" options={{ title: "Add New Task", presentation: 'modal' }} />
         </Stack>
     );
 }

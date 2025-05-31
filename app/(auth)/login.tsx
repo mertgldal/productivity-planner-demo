@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Link, useRouter } from 'expo-router';
-import { useAuthStore } from '../../src/store/useAuthStore'; // ../../src olarak güncelledim, (auth) klasöründen çıkıp src'ye ulaşmak için
+import { useAuthStore } from '../../src/store/useAuthStore'; // Updated to ../../src to reach src from (auth) folder
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginScreen() {
@@ -10,31 +10,31 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const loginUser = useAuthStore((state) => state.login);
-    // const router = useRouter(); // router.replace yönlendirmesi RootLayout'ta olduğu için burada gerek yok
+    // const router = useRouter(); // No need here because routing is handled in RootLayout
 
     const handleLogin = async () => {
         if (!email || !password) {
-            Alert.alert('Hata', 'Lütfen e-posta ve şifrenizi girin.');
+            Alert.alert('Error', 'Please enter your email and password.');
             return;
         }
         setLoading(true);
         const success = await loginUser(email, password);
         setLoading(false);
         if (success) {
-            // Başarılı giriş sonrası yönlendirme RootLayout tarafından yapılacak
-            // Eğer burada ek bir işlem yapmak isterseniz (örn: analytics) yapabilirsiniz.
+            // Successful login redirection will be handled by RootLayout
+            // You can add additional actions here if needed (e.g., analytics).
         } else {
-            Alert.alert('Giriş Başarısız', 'E-posta veya şifre hatalı.');
+            Alert.alert('Login Failed', 'Incorrect email or password.');
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Giriş Yap</Text>
+            <Text style={styles.title}>Login</Text>
 
             <TextInput
                 style={styles.input}
-                placeholder="E-posta Adresiniz"
+                placeholder="Your Email Address"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -42,7 +42,7 @@ export default function LoginScreen() {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Şifreniz"
+                placeholder="Your Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -54,14 +54,14 @@ export default function LoginScreen() {
                 ) : (
                     <>
                         <FontAwesome name="sign-in" size={20} color="white" />
-                        <Text style={styles.buttonText}>Giriş Yap</Text>
+                        <Text style={styles.buttonText}>Login</Text>
                     </>
                 )}
             </Pressable>
 
             <Link href="/(auth)/register" asChild>
                 <Pressable style={styles.linkButton}>
-                    <Text style={styles.linkText}>Hesabınız yok mu? Kayıt Olun</Text>
+                    <Text style={styles.linkText}>Don’t have an account? Register</Text>
                 </Pressable>
             </Link>
         </View>

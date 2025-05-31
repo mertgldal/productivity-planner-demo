@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Link, useRouter } from 'expo-router';
-import { useAuthStore } from '../../src/store/useAuthStore'; // ../../src olarak güncelledim
+import { useAuthStore } from '../../src/store/useAuthStore'; // Updated to ../../src
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function RegisterScreen() {
@@ -10,29 +10,29 @@ export default function RegisterScreen() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const registerUser = useAuthStore((state) => state.register);
-    // const router = useRouter(); // Yönlendirme RootLayout'ta olduğu için burada gerek yok
+    // const router = useRouter(); // No need here because routing is handled in RootLayout
 
     const handleRegister = async () => {
         if (!email || !password) {
-            Alert.alert('Hata', 'Lütfen tüm alanları doldurun.');
+            Alert.alert('Error', 'Please fill in all fields.');
             return;
         }
         setLoading(true);
         const success = await registerUser(email, password);
         setLoading(false);
         if (success) {
-            // Başarılı kayıt sonrası yönlendirme RootLayout tarafından yapılacak
+            // Successful registration redirection will be handled by RootLayout
         } else {
-            Alert.alert('Kayıt Başarısız', 'Bir sorun oluştu, lütfen tekrar deneyin.');
+            Alert.alert('Registration Failed', 'Something went wrong, please try again.');
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Hesap Oluştur</Text>
+            <Text style={styles.title}>Create Account</Text>
             <TextInput
                 style={styles.input}
-                placeholder="E-posta Adresiniz"
+                placeholder="Your Email Address"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -40,7 +40,7 @@ export default function RegisterScreen() {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Şifreniz"
+                placeholder="Your Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -52,14 +52,14 @@ export default function RegisterScreen() {
                 ) : (
                     <>
                         <FontAwesome name="user-plus" size={20} color="white" />
-                        <Text style={styles.buttonText}>Kayıt Ol</Text>
+                        <Text style={styles.buttonText}>Register</Text>
                     </>
                 )}
             </Pressable>
 
             <Link href="/(auth)/login" asChild>
                 <Pressable style={styles.linkButton}>
-                    <Text style={styles.linkText}>Zaten hesabınız var mı? Giriş Yapın</Text>
+                    <Text style={styles.linkText}>Already have an account? Login</Text>
                 </Pressable>
             </Link>
         </View>

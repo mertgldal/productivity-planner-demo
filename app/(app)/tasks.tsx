@@ -1,10 +1,10 @@
-// app/tasks.tsx dosyasında
+// app/tasks.tsx file
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native'; // Pressable eklendi
+import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native'; // Pressable added
 import { useTaskStore } from '../../src/store/useTaskStore';
 import { TaskSummaryCard } from '../../src/components/TaskSummaryCard';
-import { Link } from 'expo-router'; // Link import edildi
-import { FontAwesome } from '@expo/vector-icons'; // FontAwesome import edildi
+import { Link } from 'expo-router'; // Link imported
+import { FontAwesome } from '@expo/vector-icons'; // FontAwesome imported
 
 export default function TasksScreen() {
     const tasks = useTaskStore((state) => state.tasks);
@@ -16,16 +16,16 @@ export default function TasksScreen() {
                     data={tasks}
                     renderItem={({ item }) => <TaskSummaryCard task={item} />}
                     keyExtractor={(item) => item.id}
-                    contentContainerStyle={{ paddingBottom: 80 }} // Butonun üzerine gelmemesi için
+                    contentContainerStyle={{ paddingBottom: 80 }} // To prevent button overlap
                 />
             ) : (
-                <Text style={styles.emptyText}>Henüz hiç görev eklenmemiş.</Text>
+                <Text style={styles.emptyText}>No tasks have been added yet.</Text>
             )}
             <Link href="/createTask" asChild>
-                {/* (app) layout'u aktif olduğundan, '/createTask' -> '(app)/createTask' anlamına gelir */}
+                {/* Since the (app) layout is active, '/createTask' means '(app)/createTask' */}
                 <Pressable style={styles.addButton}>
                     <FontAwesome name="plus" size={20} color="white" />
-                    <Text style={styles.addButtonText}>Yeni Görev Ekle</Text>
+                    <Text style={styles.addButtonText}>Add New Task</Text>
                 </Pressable>
             </Link>
         </View>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         backgroundColor: '#f7f7f7',
     },
-    // EKSİK OLAN STİLİ BURAYA EKLEYİN:
+    // MISSING STYLE ADDED HERE:
     emptyText: {
         textAlign: 'center',
         marginTop: 30,

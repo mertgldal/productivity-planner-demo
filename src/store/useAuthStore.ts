@@ -4,47 +4,47 @@ import { create } from 'zustand';
 interface User {
     id: string;
     email: string;
-    // İleride name, token gibi alanlar eklenebilir
+    // Fields like name, token can be added later
 }
 
 interface AuthState {
     isAuthenticated: boolean;
     user: User | null;
-    isLoading: boolean; // Sayfa ilk açıldığında durumu kontrol etmek için
+    isLoading: boolean; // To check the status when the page first loads
     login: (email: string, pass: string) => Promise<boolean>;
     register: (email: string, pass: string) => Promise<boolean>;
     logout: () => void;
-    setLoading: (loading: boolean) => void; // Yüklenme durumunu ayarlamak için
+    setLoading: (loading: boolean) => void; // To set the loading status
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-    isAuthenticated: false, // Başlangıçta kullanıcı giriş yapmamış
+    isAuthenticated: false, // Initially, the user is not logged in
     user: null,
-    isLoading: true, // Başlangıçta yükleniyor
+    isLoading: true, // Initially loading
 
     login: async (email, password) => {
-        // GERÇEK UYGULAMADA: Burada backend'inize API çağrısı yapın
-        console.log("Login attempt:", email, password); // Simülasyon
+        // IN A REAL APP: Make an API call to your backend here
+        console.log("Login attempt:", email, password); // Simulation
         return new Promise((resolve) => {
             setTimeout(() => {
-                if (email && password) { // Çok basit bir kontrol
+                if (email && password) { // A very simple check
                     set({ isAuthenticated: true, user: { id: 'mock-user-id-123', email: email }, isLoading: false });
                     resolve(true);
                 } else {
                     set({ isLoading: false });
                     resolve(false);
                 }
-            }, 1000); // 1 saniye gecikme simülasyonu
+            }, 1000); // Simulating 1 second delay
         });
     },
 
     register: async (email, password) => {
-        // GERÇEK UYGULAMADA: Burada backend'inize API çağrısı yapın
-        console.log("Register attempt:", email, password); // Simülasyon
+        // IN A REAL APP: Make an API call to your backend here
+        console.log("Register attempt:", email, password); // Simulation
         return new Promise((resolve) => {
             setTimeout(() => {
-                if (email && password) { // Çok basit bir kontrol
-                    // Kayıttan sonra otomatik giriş yapılıyor gibi davranalım
+                if (email && password) { // A very simple check
+                    // Let's pretend the user is automatically logged in after registration
                     set({ isAuthenticated: true, user: { id: 'mock-user-id-456', email: email }, isLoading: false });
                     resolve(true);
                 } else {
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     },
 
     logout: () => {
-        // GERÇEK UYGULAMADA: Gerekirse backend'e token geçersizleştirme çağrısı yapın
+        // IN A REAL APP: Optionally call backend to invalidate token
         set({ isAuthenticated: false, user: null, isLoading: false });
         console.log("User logged out");
     },
